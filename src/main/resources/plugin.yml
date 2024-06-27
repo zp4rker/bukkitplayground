@@ -1,0 +1,8 @@
+name: BukkitPlayground
+version: '${version}'
+main: com.zp4rker.bukkitplayground.BukkitPlayground
+api-version: '1.20'
+load: STARTUP
+authors: [zp4rker]
+description: My testing plugin
+website: https://github.com/zp4rker/bukkitplayground
