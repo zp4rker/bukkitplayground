@@ -1,11 +1,13 @@
 plugins {
     id 'java'
+    id "io.github.patrick.remapper" version "1.4.2"
 }
 
 group = 'com.zp4rker'
 version = '0.0.1-alpha'
 
 repositories {
+    mavenLocal()
     mavenCentral()
     maven {
         name = "papermc-repo"
@@ -19,6 +21,7 @@ repositories {
 
 dependencies {
     compileOnly "io.papermc.paper:paper-api:1.20.6-R0.1-SNAPSHOT"
+    compileOnly "org.spigotmc:spigot:1.20.6-R0.1-SNAPSHOT:remapped-mojang"
 }
 
 def targetJavaVersion = 21
@@ -37,6 +40,14 @@ tasks.withType(JavaCompile).configureEach {
     if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
         options.release.set(targetJavaVersion)
     }
+}
+
+tasks.remap {
+    version.set("1.20.6")
+}
+
+tasks.build {
+    dependsOn(tasks.remap)
 }
 
 processResources {
