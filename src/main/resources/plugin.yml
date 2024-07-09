@@ -4,3 +4,11 @@ main: com.zp4rker.bukkitplayground.BukkitPlayground
 authors: [zp4rker]
 description: My testing plugin
 website: https://github.com/zp4rker/bukkitplayground
+
+commands:
+  stoneworld:
+    description: Creates and deletes a new stone-only world
+  voidworld:
+    description: Creates and deletes a new void world
+  world:
+    description: Teleports you to the specified world
