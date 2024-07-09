@@ -1,7 +1,5 @@
 package com.zp4rker.bukkitplayground.commands;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
