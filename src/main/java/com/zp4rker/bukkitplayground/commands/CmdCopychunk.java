@@ -6,8 +6,10 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -17,6 +19,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.CraftWorld;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,7 +30,8 @@ public class CmdCopychunk implements CommandExecutor {
         if (!(sender instanceof Player player)) return true;
 
         JsonObject layer0 = new JsonObject();
-        layer0.addProperty("block", "air");
+        layer0.addProperty("block", "minecraft:air");
+        layer0.addProperty("height", 1);
         JsonArray layers = new JsonArray();
         layers.add(layer0);
         JsonObject settings = new JsonObject();
@@ -45,27 +50,44 @@ public class CmdCopychunk implements CommandExecutor {
         ServerLevel levelTo = ((CraftWorld) world).getHandle();
         ServerLevel levelFrom = ((CraftWorld) player.getWorld()).getHandle();
 
-        LevelChunk chunkTo = levelTo.getChunk(chunk.getX(), chunk.getZ());
-        LevelChunk chunkFrom = levelFrom.getChunk(chunk.getX(), chunk.getZ());
+        int radius = args.length < 1 ? 0 : Integer.parseInt(args[0]);
+        for (int chunkX = chunk.getX() - radius; chunkX <= chunk.getX() + radius; chunkX++) {
+            for (int chunkZ = chunk.getZ() - radius; chunkZ <= chunk.getZ() + radius; chunkZ++) {
+                LevelChunk chunkTo = levelTo.getChunk(chunkX, chunkZ);
+                LevelChunk chunkFrom = levelFrom.getChunk(chunkX, chunkZ);
 
-        for (int x = 0; x < 16; x++) {
-            for (int y = 0; y < world.getMaxHeight(); y++) {
-                for (int z = 0; z < 16; z++) {
-                    BlockPos bp = new BlockPos(x, y, z);
-                    chunkTo.setBiome(x, y, z, chunkFrom.getNoiseBiome(x, y, z)); // Is this needed?
-                    BlockState blockState = chunkFrom.getBlockState(bp);
-                    chunkTo.setBlockState(bp, blockState, false);
+                for (int x = 0; x < 16; x++) {
+                    for (int y = world.getMinHeight(); y < world.getMaxHeight(); y++) {
+                        for (int z = 0; z < 16; z++) {
+                            chunkTo.setBiome(x, y, z, chunkFrom.getNoiseBiome(x, y, z));
+                            BlockPos pos = new BlockPos(x, y, z);
+                            BlockState state = chunkFrom.getBlockState(pos);
+                            chunkTo.setBlockState(pos, state, false);
+                            if (state.hasBlockEntity()) {
+                                BlockPos worldPos = new BlockPos(chunkX * 16 + x, y, chunkZ * 16 +z);
+                                BlockEntity be = levelFrom.getBlockEntity(worldPos);
+                                if (be == null) continue;
+                                chunkTo.setBlockEntity(be);
+                            }
+                        }
+                    }
+                }
+
+                for (Entity entity : levelFrom.getChunkEntities(chunkX, chunkZ)) {
+                    if (entity instanceof HumanEntity) continue;
+                    Location loc = entity.getLocation();
+                    loc.setWorld(levelTo.getWorld());
+                    entity.copy(loc);
                 }
             }
         }
 
-        sender.sendMessage(Component.text("Chunk(s) copied! Reloading now...").color(TextColor.color(0xFFAA00)));
+        sender.sendMessage(Component.text("Chunk(s) copied! Reloading world...").color(TextColor.color(0xFFAA00)));
 
-        Chunk chunkNew = world.getChunkAt(chunk.getX(), chunk.getZ());
-        chunkNew.unload(true);
-        chunkNew.load(false);
+        Bukkit.unloadWorld(world, true);
+        world = new WorldCreator(world.getName()).createWorld();
+        sender.sendMessage(Component.text("World reloaded! Teleporting you now...").color(TextColor.color(0xFFAA00)));
 
-        sender.sendMessage(Component.text("Chunk(s) reloaded! Teleporting now...").color(TextColor.color(0xFFAA00)));
         Location loc = player.getLocation();
         loc.setWorld(world);
         player.teleport(loc);
