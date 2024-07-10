@@ -4,3 +4,9 @@ main: com.zp4rker.bukkitplayground.BukkitPlayground
 authors: [zp4rker]
 description: My testing plugin
 website: https://github.com/zp4rker/bukkitplayground
+
+commands:
+  copychunk:
+    description: Copies the chunk the player is currently in into a new empty world
+  deleteworld:
+    description: Deletes the chunk_copy world
