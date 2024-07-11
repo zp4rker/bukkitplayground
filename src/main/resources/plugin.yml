@@ -10,3 +10,5 @@ commands:
     description: Copies the chunk the player is currently in into a new empty world
   deleteworld:
     description: Deletes the chunk_copy world
+  summonentity:
+    description: Teleport an entity by id to the player

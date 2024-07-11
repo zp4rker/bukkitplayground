@@ -19,8 +19,10 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.CraftWorld;
+import org.bukkit.craftbukkit.entity.CraftMob;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,7 +37,7 @@ public class CmdCopychunk implements CommandExecutor {
         JsonArray layers = new JsonArray();
         layers.add(layer0);
         JsonObject settings = new JsonObject();
-        settings.addProperty("biome", "void");
+        settings.addProperty("biome", "plains");
         settings.add("layers", layers);
 
         World world = new WorldCreator("chunk_copy")
@@ -75,9 +77,17 @@ public class CmdCopychunk implements CommandExecutor {
 
                 for (Entity entity : levelFrom.getChunkEntities(chunkX, chunkZ)) {
                     if (entity instanceof HumanEntity) continue;
+
                     Location loc = entity.getLocation();
-                    loc.setWorld(levelTo.getWorld());
-                    entity.copy(loc);
+                    loc.setWorld(world);
+                    Entity newEntity = entity.copy(loc);
+                    if (!(newEntity instanceof Mob mob)) continue;
+
+                    net.minecraft.world.entity.Mob nmsMob = ((CraftMob) mob).getHandle();
+                    nmsMob.addTag("dumb");
+
+                    mob.setAI(false);
+                    mob.setSilent(true);
                 }
             }
         }
