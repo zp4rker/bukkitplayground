@@ -1,5 +1,6 @@
 package com.zp4rker.bukkitplayground.commands;
 
+import com.zp4rker.bukkitplayground.BukkitPlayground;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.apache.commons.io.FileUtils;
@@ -16,7 +17,7 @@ import java.io.IOException;
 public class CmdDeleteworld implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-        World world = new WorldCreator("chunk_copy").createWorld();
+        World world = new WorldCreator(BukkitPlayground.WORLD_NAME).createWorld();
         if (world == null) return true;
 
         Bukkit.unloadWorld(world, false);

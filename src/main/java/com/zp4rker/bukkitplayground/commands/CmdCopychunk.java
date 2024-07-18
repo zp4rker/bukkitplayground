@@ -2,6 +2,7 @@ package com.zp4rker.bukkitplayground.commands;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.zp4rker.bukkitplayground.BukkitPlayground;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.minecraft.core.BlockPos;
@@ -9,12 +10,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
-import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.WorldCreator;
-import org.bukkit.WorldType;
+import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -40,7 +36,7 @@ public class CmdCopychunk implements CommandExecutor {
         settings.addProperty("biome", "plains");
         settings.add("layers", layers);
 
-        World world = new WorldCreator("chunk_copy")
+        World world = new WorldCreator(BukkitPlayground.WORLD_NAME)
                 .type(WorldType.FLAT)
                 .generatorSettings(settings.toString())
                 .generateStructures(false)
