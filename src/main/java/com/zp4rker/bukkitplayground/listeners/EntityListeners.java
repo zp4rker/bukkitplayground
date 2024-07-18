@@ -16,7 +16,7 @@ public class EntityListeners implements Listener {
 
         if (!(e.getEntity() instanceof Mob mob)) return;
         Entity nmsEntity = ((CraftEntity) e.getEntity()).getHandle();
-        if (!nmsEntity.getTags().contains("dumb")) return;
+        if (!nmsEntity.getTags().contains(BukkitPlayground.DUMB_TAG)) return;
 
         mob.setAI(false);
         mob.setSilent(true);
@@ -29,7 +29,7 @@ public class EntityListeners implements Listener {
         for (org.bukkit.entity.Entity entity : e.getEntities()) {
             if (!(entity instanceof Mob mob)) continue;
             Entity nmsEntity = ((CraftEntity) entity).getHandle();
-            if (!nmsEntity.getTags().contains("dumb")) continue;
+            if (!nmsEntity.getTags().contains(BukkitPlayground.DUMB_TAG)) continue;
 
             mob.setAI(false);
             mob.setSilent(true);

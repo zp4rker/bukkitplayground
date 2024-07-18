@@ -80,7 +80,7 @@ public class CmdCopychunk implements CommandExecutor {
                     if (!(newEntity instanceof Mob mob)) continue;
 
                     net.minecraft.world.entity.Mob nmsMob = ((CraftMob) mob).getHandle();
-                    nmsMob.addTag("dumb");
+                    nmsMob.addTag(BukkitPlayground.DUMB_TAG);
 
                     mob.setAI(false);
                     mob.setSilent(true);

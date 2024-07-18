@@ -9,6 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class BukkitPlayground extends JavaPlugin {
     public static final String WORLD_NAME = "chunk_copy";
+    public static final String DUMB_TAG = "bukkitplayground:dumb";
 
     @Override
     public void onEnable() {
