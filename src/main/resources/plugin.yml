@@ -1,6 +1,6 @@
 name: BukkitPlayground
-version: '${version}'
+version: ${version}
 main: com.zp4rker.bukkitplayground.BukkitPlayground
 authors: [zp4rker]
-description: My testing plugin
+description: ${description}
 website: https://github.com/zp4rker/bukkitplayground
