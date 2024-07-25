@@ -8,6 +8,7 @@ public class ReflUtil {
 
     public static final String VERSION;
     public static final int MAJOR_VERSION;
+    public static final int MINOR_VERSION;
 
     static {
         String nmsPackage;
@@ -28,6 +29,7 @@ public class ReflUtil {
 
         VERSION = Bukkit.getBukkitVersion().split("-")[0];
         MAJOR_VERSION = Integer.parseInt(VERSION.split("\\.")[1]);
+        MINOR_VERSION = VERSION.split("\\.").length > 2 ? Integer.parseInt(VERSION.split("\\.")[2]) : 0;
     }
 
     public static Class<?> getOBCClass(String className) throws ClassNotFoundException {
