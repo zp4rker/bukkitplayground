@@ -6,6 +6,9 @@ public class ReflUtil {
     private static final String OBC_PACKAGE = Bukkit.getServer().getClass().getPackage().getName();
     private static final String NMS_PACKAGE;
 
+    public static final String VERSION;
+    public static final int MAJOR_VERSION;
+
     static {
         String nmsPackage;
         Object craftServer;
@@ -22,6 +25,9 @@ public class ReflUtil {
             nmsPackage = "net.minecraft.server";
         }
         NMS_PACKAGE = nmsPackage;
+
+        VERSION = Bukkit.getBukkitVersion().split("-")[0];
+        MAJOR_VERSION = Integer.parseInt(VERSION.split("\\.")[1]);
     }
 
     public static Class<?> getOBCClass(String className) throws ClassNotFoundException {
