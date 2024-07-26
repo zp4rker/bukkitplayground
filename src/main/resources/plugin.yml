@@ -4,3 +4,4 @@ main: com.zp4rker.bukkitplayground.BukkitPlayground
 authors: [zp4rker]
 description: ${description}
 website: https://github.com/zp4rker/bukkitplayground
+api-version: 1.13
